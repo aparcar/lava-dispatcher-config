@@ -1,0 +1,33 @@
+{% extends 'base.jinja2' %}
+{% block body %}
+device_type: ar71xx_tl-wdr4300
+
+{% set console_device = console_device | default('ttyO0') %}
+{% set baud_rate = baud_rate | default(115200) %}
+
+parameters:
+  bootm:
+   kernel: '{{ bootm_kernel_addr|default('0x80200000') }}'
+
+actions:
+  deploy:
+    parameters:
+    methods:
+      tftp:
+  boot:
+    connections:
+      serial:
+    methods:
+      u-boot:
+        parameters:
+          autoboot_escape: tpl
+          autoboot_prompt: {{ autoboot_prompt|default('Autobooting in ') }}
+          bootloader_prompt: {{ bootloader_prompt|default('db12x>') }}
+        ramdisk:
+          commands:
+          - setenv kernel_addr_r '{KERNEL_ADDR}'
+          - setenv loadkernel 'tftp ${kernel_addr_r} {KERNEL}'
+          - setenv bootargs 'console={{ console_device }},{{ baud_rate }}n8 {{ base_kernel_args }}'
+          - setenv bootcmd 'run loadkernel; {BOOTX}'
+          - boot
+{% endblock %}
