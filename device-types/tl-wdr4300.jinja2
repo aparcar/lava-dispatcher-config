@@ -7,7 +7,10 @@ device_type: ar71xx_tl-wdr4300
 
 parameters:
   bootm:
-   kernel: '{{ bootm_kernel_addr|default('0x80200000') }}'
+    kernel: '{{ bootm_kernel_addr|default('0x80200000') }}'
+    dtb: '{{ bootm_dtb_addr|default('0x80300000') }}'
+    ramdisk: '{{ bootm_ramdisk_addr|default('0x80300000') }}'
+
 
 actions:
   deploy:
