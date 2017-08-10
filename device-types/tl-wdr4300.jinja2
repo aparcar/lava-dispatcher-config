@@ -7,29 +7,59 @@ device_type: ar71xx_tl-wdr4300
 
 parameters:
   bootm:
-    kernel: '{{ bootm_kernel_addr|default('0x80200000') }}'
-    dtb: '{{ bootm_dtb_addr|default('0x80300000') }}'
-    ramdisk: '{{ bootm_ramdisk_addr|default('0x80300000') }}'
+    kernel: '{{ bootm_kernel_addr|default('0x81000000') }}'
+    dtb: '{{ bootm_dtb_addr|default('0x81000000') }}'
+    ramdisk: '{{ bootm_ramdisk_addr|default('0x81000000') }}'
 
 
 actions:
   deploy:
     methods:
       tftp:
+      ssh:
+        options:
+{{ ssh_options }}
+        identity_file: /root/.ssh/id_rsa
+        user: {{ ssh_user|default(root) }}
+        port: '{{ ssh_port|default(22) }}'
+        host: {{ ssh_host }}
   boot:
     connections:
       serial:
+      ssh:
     methods:
+      ssh:
       u-boot:
         parameters:
           autoboot_escape: tpl
           autoboot_prompt: {{ autoboot_prompt|default('Autobooting in ') }}
           bootloader_prompt: {{ bootloader_prompt|default('db12x>') }}
+          boot_message: 'Booting image at 81000000'
         ramdisk:
           commands:
-          - setenv kernel_addr_r '{KERNEL_ADDR}'
-          - setenv loadkernel 'tftp ${kernel_addr_r} {KERNEL}'
-          - setenv bootargs 'console={{ console_device }},{{ baud_rate }}n8 {{ base_kernel_args }}'
-          - setenv bootcmd 'run loadkernel; {BOOTX}'
-          - boot
+            - setenv kernel_addr_r '{KERNEL_ADDR}'
+            - setenv ipaddr '192.168.201.11'
+            - setenv serverip '192.168.201.2'
+            - 'tftp ${kernel_addr_r} {KERNEL}'
+            - 'bootm 0x81000000'
 {% endblock %}
+
+{% block timeouts %}
+timeouts:
+  actions:
+    apply-overlay-image:
+      seconds: 120
+    apply-overlay-image:
+      seconds: 120
+    auto-login-action:
+      seconds: 120
+    umount-retry:
+      seconds: 45
+    lava-test-shell:
+      seconds: 30
+    power_off:
+      seconds: 35
+  connections:
+    uboot-retry:
+      seconds: 60
+{% endblock -%}

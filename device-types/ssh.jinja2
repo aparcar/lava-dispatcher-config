@@ -1,8 +1,6 @@
 {% extends 'base.jinja2' %}
 {% block body %}
 
-connection: ssh
-
 actions:
   deploy:
     methods:
@@ -11,7 +9,7 @@ actions:
 {{ ssh_options }}
         # primary connections get this from the device dictionary.
         # secondary connections get this from the lava-multinode protocol support.
-        host: {{ ssh_host|default('localhost') }}
+        host: '{{ ssh_host|default('') }}'
         port: {{ ssh_port|default(22) }}
 {{ ssh_identity}}
 
@@ -28,7 +26,5 @@ actions:
           {{ schroot_name_list|default(['unstable', 'sid'])}}
 {% endblock schroot %}
       ssh:
-#      vm:
 
-{{ timeouts }}
-{% endblock %}
+{% endblock body %}
