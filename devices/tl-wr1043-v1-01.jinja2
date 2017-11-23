@@ -1,0 +1,7 @@
+{% extends 'tl-wr1043-v1.jinja2' %}
+{% set hostname = '192.168.201.13' %}
+{% set ssh_host = '192.168.201.13' %}
+{% set connection_command = 'telnet localhost 2003' %}
+{% set power_off_command = 'netio 3 0' %}
+{% set power_on_command = 'netio 3 1' %}
+{% set hard_reset_command = 'netio 3 -1' %}

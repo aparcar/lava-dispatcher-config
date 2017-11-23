@@ -1,0 +1,33 @@
+device_type: ar71xx_tl-wr1043-v1
+job_name: "health check tl wr1043 v1"
+
+timeouts:
+  job:
+    minutes: 10
+  action:
+    seconds: 600
+  connection:
+    minutes: 5
+
+visibility: public
+
+actions:
+  - deploy:
+     timeout:
+       minutes: 2
+     to: tftp
+     kernel:
+       url: http://repo.fe80.eu/lava/gold/tl-wr1043-v1-initramfs-kernel.bin
+     os: lede
+
+  - boot:
+      method: u-boot
+      commands: ramdisk
+      type: bootm
+      prompts:
+        - 'root@lede:'
+        - 'root@\(none\):'
+      auto_login:
+        login_prompt: 'kmodloader: done loading kernel modules from /etc/modules.d/'
+        username: 'root'
+
