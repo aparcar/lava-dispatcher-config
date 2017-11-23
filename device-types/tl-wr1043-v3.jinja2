@@ -1,0 +1,71 @@
+{% extends 'base.jinja2' %}
+{% block body %}
+device_type: ar71xx_tl-wr1043-v3
+
+{% set console_device = console_device | default('ttyO0') %}
+{% set baud_rate = baud_rate | default(115200) %}
+
+parameters:
+  bootm:
+    kernel: '{{ bootm_kernel_addr|default('0x81000000') }}'
+    dtb: '{{ bootm_dtb_addr|default('0x81000000') }}'
+    ramdisk: '{{ bootm_ramdisk_addr|default('0x81000000') }}'
+
+
+actions:
+  deploy:
+    parameters:
+      foobar: "foobar"
+    methods:
+      tftp:
+      ssh:
+        options:
+{{ ssh_options }}
+        identity_file: /root/.ssh/id_rsa
+        user: {{ ssh_user|default(root) }}
+        port: '{{ ssh_port|default(22) }}'
+        host: {{ ssh_host }}
+  boot:
+    connections:
+      serial:
+      ssh:
+    methods:
+      ssh:
+      u-boot:
+        parameters:
+          interrupt_prompt: "Autobooting in"
+          # character needed to interrupt u-boot, single whitespace by default
+          interrupt_char: "ttpl"
+          bootloader_prompt: "ap135>"
+          # boot_message: "Booting Linux"
+          boot_message: "Booting image at"
+        ramdisk:
+          commands:
+            - setenv autoload no
+            - setenv kernel_addr_r '{KERNEL_ADDR}'
+            - setenv ipaddr '192.168.201.14'
+            - setenv serverip '192.168.201.4'
+            - 'tftp ${kernel_addr_r} {KERNEL}'
+            - 'bootm ${kernel_addr_r}'
+# bootm need here 2 times because of a bug when detecting the prompt
+{% endblock %}
+
+{% block timeouts %}
+timeouts:
+  actions:
+    apply-overlay-image:
+      seconds: 120
+    apply-overlay-image:
+      seconds: 120
+    auto-login-action:
+      seconds: 120
+    umount-retry:
+      seconds: 45
+    lava-test-shell:
+      seconds: 30
+    power-off:
+      seconds: 35
+  connections:
+    uboot-retry:
+      seconds: 60
+{% endblock -%}
