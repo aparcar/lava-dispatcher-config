@@ -41,11 +41,14 @@ actions:
           boot_message: "Booting image at"
         ramdisk:
           commands:
+            - setenv autoload no
             - setenv kernel_addr_r '{KERNEL_ADDR}'
             - setenv ipaddr '192.168.201.11'
-            - setenv serverip '192.168.201.2'
+            - setenv serverip '192.168.201.4'
             - 'tftp ${kernel_addr_r} {KERNEL}'
-            - 'bootm 0x81000000'
+            - 'bootm ${kernel_addr_r}'
+            - 'bootm ${kernel_addr_r}'
+# bootm need here 2 times because of a bug when detecting the prompt
 {% endblock %}
 
 {% block timeouts %}
