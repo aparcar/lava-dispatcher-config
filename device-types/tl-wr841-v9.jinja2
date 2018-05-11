@@ -44,6 +44,7 @@ actions:
             - setenv kernel_addr_r '{KERNEL_ADDR}'
             - setenv ipaddr '192.168.201.12'
             - setenv serverip '192.168.201.4'
+            - ping 192.168.201.4
             - 'tftp ${kernel_addr_r} {KERNEL}'
             - 'bootm ${kernel_addr_r}'
 # bootm need here 2 times because of a bug when detecting the prompt
