@@ -41,8 +41,8 @@ actions:
           commands:
             - setenv autoload no
             - setenv kernel_addr_r '{KERNEL_ADDR}'
-            - setenv ipaddr '192.168.201.11'
-            - setenv serverip '192.168.201.4'
+            - setenv ipaddr '{{ hostname }}'
+            - setenv serverip '{{ tftp_server }}'
             - 'tftp ${kernel_addr_r} {KERNEL}'
             - 'bootm ${kernel_addr_r}'
             - 'bootm ${kernel_addr_r}'
