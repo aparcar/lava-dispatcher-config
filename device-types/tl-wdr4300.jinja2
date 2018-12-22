@@ -1,6 +1,6 @@
 {% extends 'base.jinja2' %}
+{% set uboot_interrupt_newline = False %}
 {% block body %}
-device_type: ar71xx_tl-wdr4300
 
 {% set console_device = console_device | default('ttyO0') %}
 {% set baud_rate = baud_rate | default(115200) %}

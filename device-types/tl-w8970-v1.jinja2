@@ -1,6 +1,6 @@
 {% extends 'base.jinja2' %}
+{% set uboot_interrupt_newline = False %}
 {% block body %}
-device_type: lantiq_tl-w8970v1.jinja
 
 {% set console_device = console_device | default('ttyO0') %}
 {% set baud_rate = baud_rate | default(115200) %}
