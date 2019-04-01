@@ -14,6 +14,8 @@ parameters:
 
 actions:
   deploy:
+    parameters:
+      foobar: "foobar"
     methods:
       tftp:
       ssh:
@@ -31,15 +33,15 @@ actions:
       ssh:
       u-boot:
         parameters:
-          autoboot_escape: tpl
-          autoboot_prompt: {{ autoboot_prompt|default('Autobooting in ') }}
+          interrupt_char: ttpl
+          interrupt_prompt: {{ autoboot_prompt|default('Autobooting in ') }}
           bootloader_prompt: {{ bootloader_prompt|default('db12x>') }}
-          boot_message: 'Booting image at 81000000'
         ramdisk:
           commands:
             - setenv kernel_addr_r '{KERNEL_ADDR}'
-            - setenv ipaddr '192.168.201.11'
-            - setenv serverip '192.168.201.2'
+            - setenv ipaddr '{{ tftp_ip }}'
+            - setenv serverip '{{ tftp_server }}'
+            - ping {{ tftp_server }}
             - 'tftp ${kernel_addr_r} {KERNEL}'
             - 'bootm 0x81000000'
 {% endblock %}
@@ -57,7 +59,7 @@ timeouts:
       seconds: 45
     lava-test-shell:
       seconds: 30
-    power_off:
+    power-off:
       seconds: 35
   connections:
     uboot-retry:
