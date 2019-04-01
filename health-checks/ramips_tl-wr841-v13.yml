@@ -1,0 +1,34 @@
+device_type: ramips_tl-wr841-v13
+job_name: "health check tl 841v13"
+
+timeouts:
+  job:
+    minutes: 10
+  action:
+    seconds: 600
+  connection:
+    minutes: 5
+
+visibility: public
+
+actions:
+  - deploy:
+     timeout:
+       minutes: 2
+     to: tftp
+     kernel:
+       url: http://repo.fe80.eu/lava/gold/tl-wr841n-v13-initramfs-kernel.bin
+     os: lede
+
+  - boot:
+      method: u-boot
+      commands: ramdisk
+      type: bootm
+      prompts:
+        - 'root@lede:'
+        - 'root@\(none\):'
+      auto_login:
+        login_prompt: 'kmodloader: done loading kernel modules from /etc/modules.d/'
+        username: 'root'
+
+

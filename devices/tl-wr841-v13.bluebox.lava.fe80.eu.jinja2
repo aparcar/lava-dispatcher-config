@@ -1,0 +1,8 @@
+{% extends 'ramips_tl-wr841-v13.jinja2' %}
+{% set hostname = '192.168.202.17' %}
+{% set tftp_server = '192.168.202.1' %}
+{% set ssh_host = '192.168.201.17' %}
+{% set connection_command = 'telnet localhost 2012' %}
+{% set power_off_command = 'sispmctl -f 4' %}
+{% set power_on_command = 'sispmctl -o 4' %}
+{% set hard_reset_command = 'sispmctl -o 4' %}
