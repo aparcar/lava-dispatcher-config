@@ -1,0 +1,22 @@
+{# device_type = "mediatek_mt7622_linksys_e8450" #}
+{% extends 'base-uboot.jinja2' %}
+
+{% set base_ip_args = 'ip=dhcp' %}
+{% set uboot_bootx_cmd = "bootm" %}
+
+{% set console_device = console_device | default('ttyS0') %}
+{% set baud_rate = baud_rate | default(115200) %}
+{% set bootm_kernel_addr = '$loadaddr' %}
+
+{% set uboot_tftp_commands = [ "tftpboot $loadaddr {KERNEL}"] %}
+
+{% set uboot_method_fit = true %}
+{% set bootm_device_tree_config = "1" %}
+{% set action_timeout_bootloader_interrupt = 60 %}
+
+
+{% set shutdown_message = 'reboot: Restarting system' %}
+{% set bootloader_prompt = 'MT7622>' %}
+{% set interrupt_prompt = 'Hit any key to stop autoboot' %}
+{% set boot_character_delay = 150 %}
+{% set uboot_needs_interrupt = True %}

@@ -1,0 +1,8 @@
+{% extends 'mediatek_mt7622_linksys_e8450.jinja2' %}
+
+{% set connection_list = ['uart0'] %}
+{% set connection_commands = {'uart0': 'telnet localhost 3002'} %}
+{% set connection_tags = {'uart0': ['primary', 'telnet']} %}
+{% set power_off_command = 'ssh 192.168.2.191 power_off 8' %}
+{% set power_on_command = 'ssh 192.168.2.191 power_on 8' %}
+{% set hard_reset_command = 'ssh 192.168.2.191 power_reset 8' %}

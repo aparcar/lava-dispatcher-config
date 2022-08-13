@@ -1,0 +1,42 @@
+device_type: mediatek_mt7622_linksys_8450
+job_name: "health check Linkssy 8450"
+
+timeouts:
+  job:
+    minutes: 10
+  action:
+    minutes: 10
+  connection:
+    minutes: 5
+
+visibility: public
+
+actions:
+  - deploy:
+      to: tftp
+      kernel:
+        url: https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/openwrt-mediatek-mt7622-linksys_e8450-ubi-initramfs-recovery.itb
+
+  - boot:
+      method: u-boot
+      commands: ramdisk
+      prompts:
+        - 'root@OpenWrt:'
+        - 'root@\(none\):'
+      auto_login:
+        login_prompt: 'Please press Enter to activate this console.'
+        username: 'root'
+      transfer_overlay:
+        download_command: unset http_proxy ; cd /tmp ; wget
+        unpack_command: tar -C / -xzf
+
+  - test:
+      timeout:
+        minutes: 5
+      name: basic
+      definitions:
+        - repository: https://code.fe80.eu/openwrt-lava/lava-tests.git
+          from: git
+          path: tests/basic/basic.yml
+          name: basic
+
