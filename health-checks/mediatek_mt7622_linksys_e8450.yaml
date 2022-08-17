@@ -15,7 +15,7 @@ actions:
   - deploy:
       to: tftp
       kernel:
-        url: https://downloads.openwrt.org/snapshots/targets/mediatek/mt7622/openwrt-mediatek-mt7622-linksys_e8450-ubi-initramfs-recovery.itb
+        url: https://downloads.openwrt.org/releases/22.03.0-rc6/targets/mediatek/mt7622/openwrt-22.03.0-rc6-mediatek-mt7622-linksys_e8450-ubi-squashfs-sysupgrade.itb
 
   - boot:
       method: u-boot
