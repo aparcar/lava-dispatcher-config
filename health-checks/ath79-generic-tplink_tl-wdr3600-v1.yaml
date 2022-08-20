@@ -1,0 +1,41 @@
+device_type: ath79-generic-tplink_tl-wdr3600-v1
+job_name: "health check ath79-generic-tplink_tl-wdr3600-v1"
+
+timeouts:
+  job:
+    minutes: 10
+  action:
+    minutes: 10
+  connection:
+    minutes: 5
+
+visibility: public
+
+actions:
+  - deploy:
+      to: tftp
+      kernel:
+        url: https://downloads.openwrt.org/releases/21.02.3/targets/ath79/generic/openwrt-21.02.3-ath79-generic-tplink_tl-wdr3600-v1-initramfs-kernel.bin
+
+  - boot:
+      method: u-boot
+      commands: ramdisk
+      prompts:
+        - 'root@OpenWrt:'
+        - 'root@\(none\):'
+      auto_login:
+        login_prompt: 'Please press Enter to activate this console.'
+        username: 'root'
+      transfer_overlay:
+        download_command: sleep 15; unset http_proxy ; cd /tmp ; wget
+        unpack_command: tar -C / -xzf
+
+  - test:
+      timeout:
+        minutes: 5
+      definitions:
+        - repository: https://code.fe80.eu/openwrt-lava/lava-tests.git
+          from: git
+          path: tests/basic/basic.yml
+          name: basic
+

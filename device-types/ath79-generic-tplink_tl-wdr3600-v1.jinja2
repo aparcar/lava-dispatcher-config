@@ -1,0 +1,18 @@
+{# device_type = "ath79-generic-tplink_tl-wdr3600-v1" #}
+{% extends 'base-uboot.jinja2' %}
+
+{% set console_device = console_device | default('ttyS0') %}
+{% set baud_rate = baud_rate | default(115200) %}
+
+{% set bootm_kernel_addr = '0x81000000' %}
+{% set bootm_dtb_addr = '0x81000000' %}
+{% set bootm_ramdisk_addr = '0x81000000' %}
+
+{% set shutdown_message = 'reboot: Restarting system' %}
+{% set bootloader_prompt = 'db12x>' %}
+{% set interrupt_prompt = 'Autobooting in ' %}
+{% set interrupt_char  = 'tpl' %}
+{% set uboot_needs_interrupt = True %}
+{% set uboot_tftp_commands = [ "tftp 0x81000000 {KERNEL}" ] %}
+{% set boot_character_delay = 150 %}
+{% set uboot_bootx_cmd = "bootm" %}
