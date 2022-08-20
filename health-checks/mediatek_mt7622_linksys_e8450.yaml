@@ -27,7 +27,7 @@ actions:
         login_prompt: 'Please press Enter to activate this console.'
         username: 'root'
       transfer_overlay:
-        download_command: unset http_proxy ; cd /tmp ; wget
+        download_command: sleep 15; unset http_proxy ; cd /tmp ; wget
         unpack_command: tar -C / -xzf
 
   - test:
